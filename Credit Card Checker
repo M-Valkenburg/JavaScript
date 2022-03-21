@@ -84,7 +84,7 @@ const idInvalidCardCompanies = () => {
     console.log(`Company not found: ${invalidCards[i]}`);
     }
   }
-  companies.push(amex, visa, mastercard, discover)
+  companies.push(amex, visa, mastercard, discover);
 };
 idInvalidCardCompanies(invalidCards);
 
