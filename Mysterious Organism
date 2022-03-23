@@ -1,0 +1,76 @@
+// Returns a random DNA base
+const returnRandBase = () => {
+  const dnaBases = ['A', 'T', 'C', 'G']
+  return dnaBases[Math.floor(Math.random() * 4)] 
+}
+
+// Returns a random single stand of DNA containing 15 bases
+const mockUpStrand = () => {
+  const newStrand = []
+  for (let i = 0; i < 15; i++) {
+    newStrand.push(returnRandBase())
+  }
+  return newStrand
+}
+
+const pAequorFactory = (num, arr) => {
+  return {
+    specimenNum: num,
+    dna: arr,
+    mutate() {
+     let randomBase = Math.floor(Math.random() * this.dna.length);
+     let newBase = returnRandBase();
+     if (this.dna[randomBase] === newBase) {
+       newBase = returnRandBase();
+     } else {
+       this.dna[randomBase] = newBase;
+     }
+     return this.dna;
+    },
+    compareDNA(specimen) {
+      let identical = 0;
+      for (let i = 0; i < this.dna.length; i++) {
+        if (this.dna[i] === specimen[i]) {
+            identical++;
+          }
+        }
+      let percentage = identical / 15 * 100;
+      console.log(`Specimen #1 and specimen #2 have ${percentage.toFixed()}% DNA in common.`);
+    },
+    willLikelySurvive() {
+      let countCG = 0;
+      for (let i = 0; i < this.dna.length; i++) {
+        if (this.dna[i] === 'C' || this.dna[i] === 'G') {
+          countCG++;       
+        } 
+      }
+      let percentageCG = countCG / 15 * 100;
+      if (percentageCG >= 60) {
+        return true
+      }
+      return false
+    }
+  }
+};
+
+const survivors = () => {
+  let storedSpecimen = [];
+  while (storedSpecimen.length < 30) {
+    let specimen = pAequorFactory(storedSpecimen.length + 1, mockUpStrand());
+    if (specimen.willLikelySurvive() === true) {
+      storedSpecimen.push(specimen);
+    }
+  }
+  return storedSpecimen;
+};
+console.log(survivors());
+
+//const pAequor = pAequorFactory(1, mockUpStrand());
+//console.log(`Specimen 1: ${pAequor.dna}`);
+//console.log(`Mutated #1: ${pAequor.mutate()}`);
+
+//const pAequor2 = pAequorFactory(1, mockUpStrand());
+//console.log(`Specimen 2: ${pAequor2.dna}`);
+//pAequor.compareDNA(pAequor2.dna);
+
+//console.log(`Specimen 1: ${pAequor.willLikelySurvive()}`);
